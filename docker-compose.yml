@@ -1,0 +1,148 @@
+# ============================================================
+# 업비트 자동매매 시스템 v3.0 — Docker Compose 구성
+# 서비스: nginx(리버스 프록시) + backend(FastAPI) + frontend(React)
+#         + postgres(DB) + redis(캐시/큐)
+# 실행: docker-compose up -d --build
+# ============================================================
+
+version: '3.8'
+
+services:
+  # ─── PostgreSQL 데이터베이스 ───
+  postgres:
+    image: postgres:15-alpine
+    container_name: upbit_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-upbit_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-upbit_trading}
+    volumes:
+      # 데이터 영속화 — 컨테이너 재시작해도 데이터 유지
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-upbit_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis (Celery 브로커 + 캐시) ───
+  redis:
+    image: redis:7-alpine
+    container_name: upbit_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── FastAPI 백엔드 ───
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: upbit_backend
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      # 개발 중 코드 변경 시 자동 반영 (프로덕션에서는 제거)
+      - ./backend:/app
+    command: >
+      uvicorn main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+      --log-level info
+
+  # ─── Celery Worker (트레이딩 봇 비동기 실행) ───
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: upbit_celery_worker
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: >
+      celery -A app.celery_app worker
+      --loglevel=info
+      --concurrency=4
+      -Q trading,default
+
+  # ─── Celery Beat (주기적 작업 스케줄러) ───
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: upbit_celery_beat
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: >
+      celery -A app.celery_app beat
+      --loglevel=info
+
+  # ─── React 프론트엔드 ───
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8000/api/v1}
+        REACT_APP_WS_URL: ${REACT_APP_WS_URL:-ws://localhost:8000/ws}
+    container_name: upbit_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+
+  # ─── Nginx 리버스 프록시 ───
+  nginx:
+    image: nginx:alpine
+    container_name: upbit_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # SSL 인증서 (Let's Encrypt 등)
+      # - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+
+# ─── 데이터 영속화 볼륨 ───
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

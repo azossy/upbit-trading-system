@@ -1,0 +1,66 @@
+/* ============================================================
+   Tailwind CSS 기본 디렉티브 + 글로벌 스타일
+   ============================================================ */
+
+/* Tailwind 기본 레이어 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── 글로벌 스타일 (다크 모드 기본) ─── */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #0f172a; /* dark-bg */
+  color: #f1f5f9;
+}
+
+/* ─── 스크롤바 커스텀 (다크 테마) ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ─── 상승/하락 색상 유틸리티 ─── */
+.text-rise { color: #ef4444; }  /* 상승 빨간색 */
+.text-fall { color: #3b82f6; }  /* 하락 파란색 */
+.bg-rise { background-color: rgba(239, 68, 68, 0.1); }
+.bg-fall { background-color: rgba(59, 130, 246, 0.1); }
+
+/* ─── 카드 공통 스타일 ─── */
+.card {
+  @apply bg-dark-card rounded-xl border border-dark-border p-4;
+}
+
+/* ─── 버튼 공통 스타일 ─── */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+}
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+}
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+}
+
+/* ─── 봇 상태 뱃지 ─── */
+.badge-running {
+  @apply bg-green-900 text-green-300 px-2 py-1 rounded-full text-xs font-medium;
+}
+.badge-stopped {
+  @apply bg-gray-700 text-gray-300 px-2 py-1 rounded-full text-xs font-medium;
+}
+.badge-paused {
+  @apply bg-yellow-900 text-yellow-300 px-2 py-1 rounded-full text-xs font-medium;
+}

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업비트 자동매매 UI 프리뷰 v3.0</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body{background:#0f172a;font-family:'Segoe UI',system-ui,sans-serif;}
+  .grid-bg{background-image:linear-gradient(to right,#1e3a5f 1px,transparent 1px),linear-gradient(to bottom,#1e3a5f 1px,transparent 1px);background-size:60px 60px;}
+  .section{display:none;} .section.active{display:block;}
+</style>
+</head>
+<body class="text-white">
+<div class="fixed top-4 right-4 z-50 flex gap-2">
+  <button onclick="show('landing')" id="btn-landing" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white">🏠 랜딩페이지</button>
+  <button onclick="show('app')" id="btn-app" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gray-700 text-gray-300">📊 앱 화면</button>
+</div>
+
+<!-- 랜딩 -->
+<div id="landing" class="section active">
+  <header class="bg-gray-900/95 border-b border-gray-700/50 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+          <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="font-bold text-white text-lg">Upbit<span class="text-blue-400">Auto</span></span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#feat" class="text-gray-300 hover:text-white text-sm">기능</a>
+        <a href="#how" class="text-gray-300 hover:text-white text-sm">작동 방식</a>
+        <a href="#strat" class="text-gray-300 hover:text-white text-sm">전략</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button class="text-gray-300 text-sm px-4 py-2 hover:bg-white/10 rounded-lg">로그인</button>
+        <button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium">무료 시작</button>
+      </div>
+    </div>
+  </header>
+  <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gray-950 grid-bg">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-600/15 rounded-full blur-3xl"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center py-24">
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1.5 mb-8">
+        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block"></span>
+        <span class="text-blue-300 text-sm font-medium">AI 기반 실시간 자동매매 시스템 가동 중</span>
+      </div>
+      <h1 class="text-5xl md:text-7xl font-black text-white leading-tight mb-6">스마트한 <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">암호화폐</span><br>자동매매의 시작</h1>
+      <p class="text-gray-400 text-xl mb-10 max-w-2xl mx-auto">RSI·MACD·볼린저밴드 전략을 결합한 AI가 24시간 최적의 매매 타이밍을 포착합니다.</p>
+      <div class="flex flex-wrap justify-center gap-4 mb-20">
+        <button class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold">지금 무료로 시작하기 →</button>
+        <button class="bg-white/10 border border-white/20 text-white px-8 py-4 rounded-xl text-lg font-semibold">로그인</button>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5"><div class="text-3xl font-black text-white mb-1" id="c-win">0%</div><div class="text-gray-400 text-sm">평균 승률</div></div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5"><div class="text-3xl font-black text-white mb-1" id="c-users">0명+</div><div class="text-gray-400 text-sm">누적 사용자</div></div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5"><div class="text-3xl font-black text-white mb-1" id="c-profit">0%</div><div class="text-gray-400 text-sm">평균 수익률</div></div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5"><div class="text-3xl font-black text-white mb-1" id="c-trades">0+</div><div class="text-gray-400 text-sm">총 거래 건수</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="bg-gray-900 border-y border-gray-800">
+    <div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="flex items-center gap-3"><span class="text-2xl">🏆</span><div><div class="text-white font-semibold text-sm">3년+ 운영 경험</div><div class="text-gray-500 text-xs">안정적인 서비스</div></div></div>
+      <div class="flex items-center gap-3"><span class="text-2xl">⚡</span><div><div class="text-white font-semibold text-sm">99.9% 가동률</div><div class="text-gray-500 text-xs">24/7 무중단 운영</div></div></div>
+      <div class="flex items-center gap-3"><span class="text-2xl">🛡️</span><div><div class="text-white font-semibold text-sm">실시간 모니터링</div><div class="text-gray-500 text-xs">이상 감지 자동 중단</div></div></div>
+      <div class="flex items-center gap-3"><span class="text-2xl">📊</span><div><div class="text-white font-semibold text-sm">다중 전략 지원</div><div class="text-gray-500 text-xs">RSI · MACD · BB</div></div></div>
+    </div>
+  </section>
+  <section id="feat" class="bg-gray-950 py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16"><div class="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">핵심 기능</div><h2 class="text-4xl font-black text-white mb-4">수익을 위한 모든 도구</h2></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:-translate-y-1"><div class="text-3xl mb-4">🤖</div><h3 class="text-white font-bold text-lg mb-2">AI 자동 매매</h3><p class="text-gray-400 text-sm">머신러닝 기반 알고리즘이 시장 데이터를 분석하여 최적의 매매 타이밍을 자동으로 결정합니다.</p></div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:-translate-y-1"><div class="text-3xl mb-4">📈</div><h3 class="text-white font-bold text-lg mb-2">실시간 차트 분석</h3><p class="text-gray-400 text-sm">다중 기술적 지표를 동시에 분석하여 정확도 높은 진입·청산 시그널을 생성합니다.</p></div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:-translate-y-1"><div class="text-3xl mb-4">🛡️</div><h3 class="text-white font-bold text-lg mb-2">리스크 관리</h3><p class="text-gray-400 text-sm">손절 라인, 포지션 크기, 일일 최대 손실 한도를 자동으로 관리하여 자산을 보호합니다.</p></div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:-translate-y-1"><div class="text-3xl mb-4">🔔</div><h3 class="text-white font-bold text-lg mb-2">알림 시스템</h3><p class="text-gray-400 text-sm">매매 실행, 수익 달성, 이상 상황 발생 시 즉시 알림을 받아 언제나 현황을 파악합니다.</p></div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:-translate-y-1"><div class="text-3xl mb-4">📊</div><h3 class="text-white font-bold text-lg mb-2">성과 분석</h3><p class="text-gray-400 text-sm">누적 수익률, 승률, 최대 낙폭 등 상세한 퍼포먼스 지표로 전략을 지속적으로 최적화합니다.</p></div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:-translate-y-1"><div class="text-3xl mb-4">⚡</div><h3 class="text-white font-bold text-lg mb-2">고속 주문 처리</h3><p class="text-gray-400 text-sm">업비트 API와 직접 연결되어 밀리초 단위의 빠른 주문 처리로 슬리피지를 최소화합니다.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="how" class="bg-gray-900 py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16"><div class="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">작동 방식</div><h2 class="text-4xl font-black text-white mb-4">4단계로 시작하는 자동매매</h2></div>
+      <div class="relative">
+        <div class="hidden md:block absolute top-10 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent mx-24"></div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="flex flex-col items-center text-center"><div class="w-20 h-20 rounded-full bg-gray-950 border-2 border-blue-500/50 flex items-center justify-center mb-6"><span class="text-blue-400 font-black text-xl">01</span></div><h3 class="text-white font-bold mb-2">회원가입</h3><p class="text-gray-400 text-sm">이메일로 간편하게 가입하고 업비트 API 키를 연결합니다.</p></div>
+          <div class="flex flex-col items-center text-center"><div class="w-20 h-20 rounded-full bg-gray-950 border-2 border-blue-500/50 flex items-center justify-center mb-6"><span class="text-blue-400 font-black text-xl">02</span></div><h3 class="text-white font-bold mb-2">전략 설정</h3><p class="text-gray-400 text-sm">RSI, MACD, 볼린저밴드 중 원하는 전략을 선택합니다.</p></div>
+          <div class="flex flex-col items-center text-center"><div class="w-20 h-20 rounded-full bg-gray-950 border-2 border-blue-500/50 flex items-center justify-center mb-6"><span class="text-blue-400 font-black text-xl">03</span></div><h3 class="text-white font-bold mb-2">봇 실행</h3><p class="text-gray-400 text-sm">한 번의 클릭으로 자동매매 봇이 24시간 모니터링합니다.</p></div>
+          <div class="flex flex-col items-center text-center"><div class="w-20 h-20 rounded-full bg-gray-950 border-2 border-blue-500/50 flex items-center justify-center mb-6"><span class="text-blue-400 font-black text-xl">04</span></div><h3 class="text-white font-bold mb-2">수익 확인</h3><p class="text-gray-400 text-sm">실시간 대시보드에서 거래 내역과 수익을 확인합니다.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="strat" class="bg-gray-950 py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16"><div class="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">트레이딩 전략</div><h2 class="text-4xl font-black text-white mb-4">검증된 매매 알고리즘</h2></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-white font-bold text-lg">RSI 전략</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-500/20 text-green-400">인기</span></div><p class="text-gray-400 text-sm mb-5">과매수/과매도 구간을 정밀 포착하여 역추세 매매로 안정적 수익을 추구합니다.</p><div class="space-y-3"><div><div class="flex justify-between text-xs mb-1"><span class="text-gray-400">평균 승률</span><span class="text-white font-semibold">73%</span></div><div class="h-1.5 bg-gray-800 rounded-full"><div class="h-full w-[73%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div></div></div><div><div class="flex justify-between text-xs mb-1"><span class="text-gray-400">월 수익률</span><span class="text-white font-semibold">18%</span></div><div class="h-1.5 bg-gray-800 rounded-full"><div class="h-full w-[18%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div></div></div></div></div>
+        <div class="bg-gray-900 border border-blue-500/30 rounded-2xl p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-white font-bold text-lg">MACD 전략</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-400">추천</span></div><p class="text-gray-400 text-sm mb-5">이동평균 수렴·발산 지표로 추세 전환점을 조기에 포착합니다.</p><div class="space-y-3"><div><div class="flex justify-between text-xs mb-1"><span class="text-gray-400">평균 승률</span><span class="text-white font-semibold">68%</span></div><div class="h-1.5 bg-gray-800 rounded-full"><div class="h-full w-[68%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div></div></div><div><div class="flex justify-between text-xs mb-1"><span class="text-gray-400">월 수익률</span><span class="text-white font-semibold">24%</span></div><div class="h-1.5 bg-gray-800 rounded-full"><div class="h-full w-[24%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div></div></div></div></div>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-white font-bold text-lg">볼린저밴드</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400">안정형</span></div><p class="text-gray-400 text-sm mb-5">변동성 밴드를 활용해 가격 이탈 시 진입하는 평균회귀 전략입니다.</p><div class="space-y-3"><div><div class="flex justify-between text-xs mb-1"><span class="text-gray-400">평균 승률</span><span class="text-white font-semibold">71%</span></div><div class="h-1.5 bg-gray-800 rounded-full"><div class="h-full w-[71%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div></div></div><div><div class="flex justify-between text-xs mb-1"><span class="text-gray-400">월 수익률</span><span class="text-white font-semibold">15%</span></div><div class="h-1.5 bg-gray-800 rounded-full"><div class="h-full w-[15%] bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div></div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="relative overflow-hidden bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 py-20">
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-4xl md:text-5xl font-black text-white mb-4">지금 바로 시작하세요</h2>
+      <p class="text-blue-100 text-xl mb-10">회원가입 후 즉시 자동매매를 시작할 수 있습니다.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="bg-white text-blue-700 px-8 py-4 rounded-xl text-lg font-bold shadow-xl">무료로 시작하기 →</button>
+        <button class="border-2 border-white/40 text-white px-8 py-4 rounded-xl text-lg font-semibold">로그인</button>
+      </div>
+    </div>
+  </section>
+  <footer class="bg-gray-950 border-t border-gray-800 py-12">
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-600 text-xs">© 2026 UpbitAuto. All rights reserved. | 업비트 자동매매 시스템 v3.0</div>
+  </footer>
+</div>
+
+<!-- 앱 화면 -->
+<div id="app" class="section">
+  <div class="flex h-screen bg-gray-950">
+    <aside class="w-60 bg-gray-900 border-r border-gray-800 flex flex-col">
+      <div class="h-16 flex items-center px-4 gap-2.5 border-b border-gray-800">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center"><svg viewBox="0 0 24 24" fill="none" class="w-5 h-5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="font-bold text-white text-sm">Upbit<span class="text-blue-400">Auto</span></span>
+      </div>
+      <div class="px-3 py-3 border-b border-gray-800"><div class="bg-gray-800 rounded-xl p-3"><div class="flex items-center justify-between mb-1.5"><span class="text-gray-400 text-xs">봇 상태</span><div class="flex items-center gap-1.5 text-xs font-medium text-green-400"><span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block"></span>실행 중</div></div><div class="text-xs text-gray-400">🐂 상승장</div></div></div>
+      <nav class="flex-1 py-3 px-2 space-y-1">
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="text-sm font-medium">대시보드</span></a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:bg-gray-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span class="text-sm font-medium">거래 내역</span></a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:bg-gray-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-sm font-medium">봇 설정</span></a>
+      </nav>
+      <div class="border-t border-gray-800 p-2"><button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:text-red-400 hover:bg-red-500/10"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span class="text-sm font-medium">로그아웃</span></button></div>
+    </aside>
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <header class="h-16 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-6">
+        <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium bg-green-500/10 text-green-400 border border-green-500/30">🐂 상승장</span>
+        <div class="flex items-center gap-3"><div class="text-right"><div class="text-white text-sm font-medium">admin</div><div class="text-gray-500 text-xs">admin@upbit.com</div></div><div class="w-9 h-9 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-sm">A</div></div>
+      </header>
+      <main class="flex-1 overflow-y-auto p-6 bg-gray-950">
+        <div class="mb-6"><h1 class="text-2xl font-bold text-white mb-1">대시보드</h1><p class="text-gray-400 text-sm">실시간 트레이딩 현황</p></div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4"><div class="text-gray-400 text-xs mb-1">총 자산</div><div class="text-white text-xl font-bold">₩12,450,000</div><div class="text-green-400 text-xs mt-1">▲ 2.3%</div></div>
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4"><div class="text-gray-400 text-xs mb-1">오늘 수익</div><div class="text-green-400 text-xl font-bold">+₩284,000</div><div class="text-gray-500 text-xs mt-1">3건 거래</div></div>
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4"><div class="text-gray-400 text-xs mb-1">승률</div><div class="text-white text-xl font-bold">73.2%</div><div class="text-gray-500 text-xs mt-1">최근 30일</div></div>
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4"><div class="text-gray-400 text-xs mb-1">봇 상태</div><div class="flex items-center gap-2 mt-1"><span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse inline-block"></span><span class="text-green-400 font-bold">실행 중</span></div><div class="text-gray-500 text-xs mt-1">MACD 전략</div></div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4"><h3 class="text-white font-semibold mb-4">수익률 추이</h3><canvas id="chart" height="160"></canvas></div>
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4"><h3 class="text-white font-semibold mb-4">최근 거래 내역</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between py-2 border-b border-gray-800"><div><div class="text-white text-sm font-medium">BTC/KRW 매수</div><div class="text-gray-500 text-xs">13:24:55</div></div><div class="text-right"><div class="text-green-400 text-sm font-semibold">+₩45,200</div><div class="text-gray-500 text-xs">RSI</div></div></div>
+              <div class="flex items-center justify-between py-2 border-b border-gray-800"><div><div class="text-white text-sm font-medium">ETH/KRW 매도</div><div class="text-gray-500 text-xs">11:08:33</div></div><div class="text-right"><div class="text-red-400 text-sm font-semibold">-₩12,800</div><div class="text-gray-500 text-xs">MACD</div></div></div>
+              <div class="flex items-center justify-between py-2"><div><div class="text-white text-sm font-medium">XRP/KRW 매수</div><div class="text-gray-500 text-xs">09:15:20</div></div><div class="text-right"><div class="text-green-400 text-sm font-semibold">+₩28,600</div><div class="text-gray-500 text-xs">BB</div></div></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('btn-landing').className='px-4 py-2 rounded-lg text-sm font-semibold '+(id==='landing'?'bg-blue-600 text-white':'bg-gray-700 text-gray-300');
+  document.getElementById('btn-app').className='px-4 py-2 rounded-lg text-sm font-semibold '+(id==='app'?'bg-blue-600 text-white':'bg-gray-700 text-gray-300');
+  if(id==='landing') animateAll();
+  if(id==='app') initChart();
+}
+function animateCount(el,target,suffix,dur=2000){
+  const s=performance.now();
+  const t=(now)=>{const p=Math.min((now-s)/dur,1);const e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*target).toLocaleString()+suffix;if(p<1)requestAnimationFrame(t);else el.textContent=target.toLocaleString()+suffix;};
+  requestAnimationFrame(t);
+}
+function animateAll(){
+  setTimeout(()=>{
+    animateCount(document.getElementById('c-win'),87,'%');
+    animateCount(document.getElementById('c-users'),2400,'명+');
+    animateCount(document.getElementById('c-profit'),340,'%');
+    animateCount(document.getElementById('c-trades'),18500,'+');
+  },300);
+}
+let chartInst=null;
+function initChart(){
+  const canvas=document.getElementById('chart');
+  if(!canvas||chartInst) return;
+  chartInst=new Chart(canvas.getContext('2d'),{type:'line',data:{labels:['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],datasets:[{label:'수익률(%)',data:[5,8,12,9,18,15,22,19,28,24,32,29],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',tension:0.4,fill:true,pointBackgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#94a3b8',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#94a3b8',font:{size:10}}}}}});
+}
+animateAll();
+</script>
+</body>
+</html>

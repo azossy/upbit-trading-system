@@ -1,0 +1,96 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables (보안상 절대 커밋하지 않음)
+.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Database
+*.db
+*.sqlite3
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React build output
+frontend/build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V5
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Alembic (버전 파일은 커밋, 캐시는 제외)
+# alembic/versions/ 는 커밋
+
+# Nginx logs
+nginx/logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Claude settings (로컬 전용)
+.claude/settings.local.json
